@@ -11,15 +11,17 @@ export interface ImageProps extends EntityProps {
 }
 
 export class Image extends Entity {
-	#root: Root | null;
+	#root: Root;
 	#src: string;
 	#image?: IImage;
+	#loading: boolean = false;
+	#loaded: boolean = false;
 	sx?: number;
 	sy?: number;
 	sw?: number;
 	sh?: number;
 
-	constructor(opts: ImageProps, root: Root | null) {
+	constructor(opts: ImageProps, root: Root) {
 		super({
 			width: 0,
 			height: 0,
@@ -39,16 +41,17 @@ export class Image extends Entity {
 	}
 
 	set src(v: string) {
-		this.#src = v;
-		this.loadImage();
+		if (this.#src !== v) {
+			this.#src = v;
+			this.#loaded = false;
+			this.loadImage();
+		}
 	}
 
 	async loadImage() {
-		if (!this.#root) {
-			console.warn('Root is not set, unable to load image');
-			return;
-		}
+		if (this.#loading || this.#loaded) return;
 
+		this.#loading = true;
 		try {
 			const img = await this.#root.loadImage(this.#src);
 			this.#image = img;
@@ -58,17 +61,18 @@ export class Image extends Entity {
 			if (this.height === 0) {
 				this.height = img.naturalHeight;
 			}
-
+			this.#loaded = true;
 			this.#root.queueRender();
 		} catch (error) {
-			// Xử lý lỗi một cách im lặng, hoặc log nếu cần thiết
 			// console.error('Error loading image:', error);
+		} finally {
+			this.#loading = false;
 		}
 	}
 
 	render(): void {
 		super.render();
-		if (!this.#root || !this.#image) return;
+		if (!this.#loaded || !this.#image) return;
 
 		try {
 			this.#root.ctx.drawImage(
@@ -83,7 +87,6 @@ export class Image extends Entity {
 				this.height,
 			);
 		} catch (error) {
-			// Xử lý lỗi một cách im lặng, hoặc log nếu cần thiết
 			// console.error('Error drawing image:', error);
 		}
 	}

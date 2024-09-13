@@ -13,7 +13,7 @@ export declare class Image extends Entity {
     sy?: number;
     sw?: number;
     sh?: number;
-    constructor(opts: ImageProps, root: Root | null);
+    constructor(opts: ImageProps, root: Root);
     get src(): string;
     set src(v: string);
     loadImage(): Promise<void>;
