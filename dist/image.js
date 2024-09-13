@@ -37,15 +37,22 @@ export class Image extends Entity {
         this.loadImage();
     }
     async loadImage() {
-        const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
-        __classPrivateFieldSet(this, _Image_image, img, "f");
-        if (this.width === 0) {
-            this.width = img.naturalWidth;
+        try {
+            const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
+            __classPrivateFieldSet(this, _Image_image, img, "f");
+            if (this.width === 0) {
+                this.width = img.naturalWidth;
+            }
+            if (this.height === 0) {
+                this.height = img.naturalHeight;
+            }
+            this.root?.queueRender();
         }
-        if (this.height === 0) {
-            this.height = img.naturalHeight;
+        catch (error) {
+            console.error("Lỗi khi tải hình ảnh:", error);
+            // Xử lý lỗi ở đây
+            // Ví dụ: cập nhật trạng thái, hiển thị hình ảnh lỗi, vv.
         }
-        this.root?.queueRender();
     }
     render() {
         super.render();

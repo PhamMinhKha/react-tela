@@ -44,15 +44,21 @@ export class Image extends Entity {
 	}
 
 	async loadImage() {
-		const img = await this.#root.loadImage(this.#src);
-		this.#image = img;
-		if (this.width === 0) {
-			this.width = img.naturalWidth;
+		try {
+			const img = await this.#root.loadImage(this.#src);
+			this.#image = img;
+			if (this.width === 0) {
+				this.width = img.naturalWidth;
+			}
+			if (this.height === 0) {
+				this.height = img.naturalHeight;
+			}
+			this.root?.queueRender();
+		} catch (error) {
+			console.error("Lỗi khi tải hình ảnh:", error);
+			// Xử lý lỗi ở đây
+			// Ví dụ: cập nhật trạng thái, hiển thị hình ảnh lỗi, vv.
 		}
-		if (this.height === 0) {
-			this.height = img.naturalHeight;
-		}
-		this.root?.queueRender();
 	}
 
 	render(): void {
