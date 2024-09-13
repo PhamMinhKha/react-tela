@@ -64,6 +64,7 @@ export class Image extends Entity {
 			this.#loaded = true;
 			this.#root.queueRender();
 		} catch (error) {
+			this.#loading = false;
 			// console.error('Error loading image:', error);
 		} finally {
 			this.#loading = false;

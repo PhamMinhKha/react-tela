@@ -58,6 +58,7 @@ export class Image extends Entity {
             __classPrivateFieldGet(this, _Image_root, "f").queueRender();
         }
         catch (error) {
+            __classPrivateFieldSet(this, _Image_loading, false, "f");
             // console.error('Error loading image:', error);
         }
         finally {
