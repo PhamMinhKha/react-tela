@@ -44,15 +44,19 @@ export class Image extends Entity {
 	}
 
 	async loadImage() {
-		const img = await this.#root.loadImage(this.#src);
-		this.#image = img;
-		if (this.width === 0) {
-			this.width = img.naturalWidth;
+		try {
+			const img = await this.#root.loadImage(this.#src);
+			this.#image = img;
+			if (this.width === 0) {
+				this.width = img.naturalWidth;
+			}
+			if (this.height === 0) {
+				this.height = img.naturalHeight;
+			}
+			this.root?.queueRender();
+		} catch (error) {
+			console.error('Error loading image:', error);
 		}
-		if (this.height === 0) {
-			this.height = img.naturalHeight;
-		}
-		this.root?.queueRender();
 	}
 
 	render(): void {
@@ -60,16 +64,22 @@ export class Image extends Entity {
 		const { root } = this;
 		const img = this.#image;
 		if (!img) return;
-		root.ctx.drawImage(
-			img,
-			this.sx ?? 0,
-			this.sy ?? 0,
-			this.sw ?? img.naturalWidth,
-			this.sh ?? img.naturalHeight,
-			0,
-			0,
-			this.width,
-			this.height,
-		);
+
+		try {
+			root.ctx.drawImage(
+				img,
+				this.sx ?? 0,
+				this.sy ?? 0,
+				this.sw ?? img.naturalWidth,
+				this.sh ?? img.naturalHeight,
+				0,
+				0,
+				this.width,
+				this.height,
+			);
+		} catch (error) {
+			
+			// Bạn có thể thêm xử lý lỗi bổ sung ở đây nếu cần
+		}
 	}
 }
