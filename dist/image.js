@@ -33,8 +33,10 @@ export class Image extends Entity {
         return __classPrivateFieldGet(this, _Image_src, "f");
     }
     set src(v) {
-        __classPrivateFieldSet(this, _Image_src, v, "f");
-        this.loadImage();
+        if (__classPrivateFieldGet(this, _Image_src, "f") !== v) {
+            __classPrivateFieldSet(this, _Image_src, v, "f");
+            this.loadImage();
+        }
     }
     async loadImage() {
         try {
@@ -49,21 +51,25 @@ export class Image extends Entity {
             this.root?.queueRender();
         }
         catch (error) {
-            // console.error("Lỗi khi tải hình ảnh:", error);
-            // Xử lý lỗi ở đây
-            // Ví dụ: cập nhật trạng thái, hiển thị hình ảnh lỗi, vv.
+            // console.error("Error loading image:", error);
+            // Thực hiện xử lý lỗi tùy chỉnh ở đây nếu cần
         }
     }
     render() {
         super.render();
         const { root } = this;
         const img = __classPrivateFieldGet(this, _Image_image, "f");
-        if (!img)
+        if (!img || !root.ctx)
             return;
+        const sx = this.sx ?? 0;
+        const sy = this.sy ?? 0;
+        const sw = this.sw ?? img.naturalWidth;
+        const sh = this.sh ?? img.naturalHeight;
         try {
-            root.ctx.drawImage(img, this.sx ?? 0, this.sy ?? 0, this.sw ?? img.naturalWidth, this.sh ?? img.naturalHeight, 0, 0, this.width, this.height);
+            root.ctx.drawImage(img, sx, sy, sw, sh, 0, 0, this.width, this.height);
         }
         catch (error) {
+            // console.error("Error rendering image:", error);
         }
     }
 }
