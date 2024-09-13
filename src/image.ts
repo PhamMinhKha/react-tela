@@ -55,7 +55,7 @@ export class Image extends Entity {
 			}
 			this.root?.queueRender();
 		} catch (error) {
-			console.error("Lỗi khi tải hình ảnh:", error);
+			// console.error("Lỗi khi tải hình ảnh:", error);
 			// Xử lý lỗi ở đây
 			// Ví dụ: cập nhật trạng thái, hiển thị hình ảnh lỗi, vv.
 		}
