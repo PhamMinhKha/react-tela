@@ -1,5 +1,5 @@
 {
-  "name": "react-tela",
+  "name": "fake-tela",
   "version": "0.0.3",
   "description": "React renderer for Canvas",
   "type": "module",
