@@ -14,8 +14,6 @@ export class Image extends Entity {
 	#root: Root;
 	#src: string;
 	#image?: IImage;
-	#loading: boolean = false;
-	#loaded: boolean = false;
 	sx?: number;
 	sy?: number;
 	sw?: number;
@@ -41,54 +39,41 @@ export class Image extends Entity {
 	}
 
 	set src(v: string) {
-		if (this.#src !== v) {
-			this.#src = v;
-			this.#loaded = false;
-			this.loadImage();
-		}
+		this.#src = v;
+		this.loadImage();
 	}
 
 	async loadImage() {
-		if (this.#loading || this.#loaded) return;
-
-		this.#loading = true;
-		try {
-			const img = await this.#root.loadImage(this.#src);
-			this.#image = img;
-			if (this.width === 0) {
-				this.width = img.naturalWidth;
-			}
-			if (this.height === 0) {
-				this.height = img.naturalHeight;
-			}
-			this.#loaded = true;
-			this.#root.queueRender();
-		} catch (error) {
-			this.#loading = false;
-			// console.error('Error loading image:', error);
-		} finally {
-			this.#loading = false;
+		const img = await this.#root.loadImage(this.#src);
+		this.#image = img;
+		if (this.width === 0) {
+			this.width = img.naturalWidth;
 		}
+		if (this.height === 0) {
+			this.height = img.naturalHeight;
+		}
+		this.root?.queueRender();
 	}
 
 	render(): void {
 		super.render();
-		if (!this.#loaded || !this.#image) return;
-
+		const { root } = this;
+		const img = this.#image;
+		if (!img) return;
 		try {
-			this.#root.ctx.drawImage(
-				this.#image,
+			root.ctx.drawImage(
+				img,
 				this.sx ?? 0,
 				this.sy ?? 0,
-				this.sw ?? this.#image.naturalWidth,
-				this.sh ?? this.#image.naturalHeight,
+				this.sw ?? img.naturalWidth,
+				this.sh ?? img.naturalHeight,
 				0,
 				0,
 				this.width,
 				this.height,
 			);
 		} catch (error) {
-			// console.error('Error drawing image:', error);
+
 		}
 	}
 }

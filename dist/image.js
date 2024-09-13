@@ -9,7 +9,7 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _Image_root, _Image_src, _Image_image, _Image_loading, _Image_loaded;
+var _Image_root, _Image_src, _Image_image;
 import { Entity } from './entity.js';
 export class Image extends Entity {
     constructor(opts, root) {
@@ -21,8 +21,6 @@ export class Image extends Entity {
         _Image_root.set(this, void 0);
         _Image_src.set(this, void 0);
         _Image_image.set(this, void 0);
-        _Image_loading.set(this, false);
-        _Image_loaded.set(this, false);
         this.sx = opts.sx;
         this.sy = opts.sy;
         this.sw = opts.sw;
@@ -35,47 +33,32 @@ export class Image extends Entity {
         return __classPrivateFieldGet(this, _Image_src, "f");
     }
     set src(v) {
-        if (__classPrivateFieldGet(this, _Image_src, "f") !== v) {
-            __classPrivateFieldSet(this, _Image_src, v, "f");
-            __classPrivateFieldSet(this, _Image_loaded, false, "f");
-            this.loadImage();
-        }
+        __classPrivateFieldSet(this, _Image_src, v, "f");
+        this.loadImage();
     }
     async loadImage() {
-        if (__classPrivateFieldGet(this, _Image_loading, "f") || __classPrivateFieldGet(this, _Image_loaded, "f"))
-            return;
-        __classPrivateFieldSet(this, _Image_loading, true, "f");
-        try {
-            const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
-            __classPrivateFieldSet(this, _Image_image, img, "f");
-            if (this.width === 0) {
-                this.width = img.naturalWidth;
-            }
-            if (this.height === 0) {
-                this.height = img.naturalHeight;
-            }
-            __classPrivateFieldSet(this, _Image_loaded, true, "f");
-            __classPrivateFieldGet(this, _Image_root, "f").queueRender();
+        const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
+        __classPrivateFieldSet(this, _Image_image, img, "f");
+        if (this.width === 0) {
+            this.width = img.naturalWidth;
         }
-        catch (error) {
-            __classPrivateFieldSet(this, _Image_loading, false, "f");
-            // console.error('Error loading image:', error);
+        if (this.height === 0) {
+            this.height = img.naturalHeight;
         }
-        finally {
-            __classPrivateFieldSet(this, _Image_loading, false, "f");
-        }
+        this.root?.queueRender();
     }
     render() {
         super.render();
-        if (!__classPrivateFieldGet(this, _Image_loaded, "f") || !__classPrivateFieldGet(this, _Image_image, "f"))
+        const { root } = this;
+        const img = __classPrivateFieldGet(this, _Image_image, "f");
+        if (!img)
             return;
         try {
-            __classPrivateFieldGet(this, _Image_root, "f").ctx.drawImage(__classPrivateFieldGet(this, _Image_image, "f"), this.sx ?? 0, this.sy ?? 0, this.sw ?? __classPrivateFieldGet(this, _Image_image, "f").naturalWidth, this.sh ?? __classPrivateFieldGet(this, _Image_image, "f").naturalHeight, 0, 0, this.width, this.height);
+            root.ctx.drawImage(img, this.sx ?? 0, this.sy ?? 0, this.sw ?? img.naturalWidth, this.sh ?? img.naturalHeight, 0, 0, this.width, this.height);
         }
         catch (error) {
-            // console.error('Error drawing image:', error);
         }
     }
 }
-_Image_root = new WeakMap(), _Image_src = new WeakMap(), _Image_image = new WeakMap(), _Image_loading = new WeakMap(), _Image_loaded = new WeakMap();
+_Image_root = new WeakMap(), _Image_src = new WeakMap(), _Image_image = new WeakMap();
 //# sourceMappingURL=image.js.map
