@@ -55,7 +55,8 @@ export class Image extends Entity {
 			}
 			this.root?.queueRender();
 		} catch (error) {
-			console.error('Error loading image:', error);
+			//skip error loading image
+			// console.error('Error loading image:', error);
 		}
 	}
 
@@ -78,7 +79,7 @@ export class Image extends Entity {
 				this.height,
 			);
 		} catch (error) {
-			
+
 			// Bạn có thể thêm xử lý lỗi bổ sung ở đây nếu cần
 		}
 	}
