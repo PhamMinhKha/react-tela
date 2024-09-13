@@ -64,7 +64,7 @@ export class Image extends Entity {
 		super.render();
 		const { root } = this;
 		const img = this.#image;
-		if (!img) return;
+		if (!img || !root) return;
 
 		try {
 			root.ctx.drawImage(
