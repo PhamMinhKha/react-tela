@@ -113,11 +113,11 @@ export class Entity extends TelaEventTarget {
 
 	get root() {
 		const r = this._root;
-		// if (!r) {
-		// throw new Error(
-		// 	`Entity "${this.constructor.name}" has not been added to a \`Root\` context`,
-		// );
-		// }
+		if (!r) {
+			throw new Error(
+				`Entity "${this.constructor.name}" has not been added to a \`Root\` context`,
+			);
+		}
 		return r;
 	}
 

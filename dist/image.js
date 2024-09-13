@@ -37,6 +37,10 @@ export class Image extends Entity {
         this.loadImage();
     }
     async loadImage() {
+        if (!__classPrivateFieldGet(this, _Image_root, "f")) {
+            console.warn('Root is not set, unable to load image');
+            return;
+        }
         try {
             const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
             __classPrivateFieldSet(this, _Image_image, img, "f");
@@ -46,23 +50,23 @@ export class Image extends Entity {
             if (this.height === 0) {
                 this.height = img.naturalHeight;
             }
-            this.root?.queueRender();
+            __classPrivateFieldGet(this, _Image_root, "f").queueRender();
         }
         catch (error) {
-            console.error('Error loading image:', error);
+            // Xử lý lỗi một cách im lặng, hoặc log nếu cần thiết
+            // console.error('Error loading image:', error);
         }
     }
     render() {
         super.render();
-        const { root } = this;
-        const img = __classPrivateFieldGet(this, _Image_image, "f");
-        if (!img)
+        if (!__classPrivateFieldGet(this, _Image_root, "f") || !__classPrivateFieldGet(this, _Image_image, "f"))
             return;
         try {
-            root.ctx.drawImage(img, this.sx ?? 0, this.sy ?? 0, this.sw ?? img.naturalWidth, this.sh ?? img.naturalHeight, 0, 0, this.width, this.height);
+            __classPrivateFieldGet(this, _Image_root, "f").ctx.drawImage(__classPrivateFieldGet(this, _Image_image, "f"), this.sx ?? 0, this.sy ?? 0, this.sw ?? __classPrivateFieldGet(this, _Image_image, "f").naturalWidth, this.sh ?? __classPrivateFieldGet(this, _Image_image, "f").naturalHeight, 0, 0, this.width, this.height);
         }
         catch (error) {
-            // Bạn có thể thêm xử lý lỗi bổ sung ở đây nếu cần
+            // Xử lý lỗi một cách im lặng, hoặc log nếu cần thiết
+            // console.error('Error drawing image:', error);
         }
     }
 }
