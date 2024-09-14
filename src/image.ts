@@ -83,11 +83,6 @@ export class Image extends Entity {
 		const { root } = this;
 		const img = this.#image;
 		if (!img || !root.ctx) return;
-
-		try {
-			root.ctx.drawImage(img, ...this.#renderParams);
-		} catch (error) {
-			// console.warn("Error rendering image:", error);
-		}
+		root.ctx.drawImage(img, ...this.#renderParams);
 	}
 }

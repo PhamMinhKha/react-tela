@@ -80,12 +80,7 @@ export class Image extends Entity {
         const img = __classPrivateFieldGet(this, _Image_image, "f");
         if (!img || !root.ctx)
             return;
-        try {
-            root.ctx.drawImage(img, ...__classPrivateFieldGet(this, _Image_renderParams, "f"));
-        }
-        catch (error) {
-            // console.warn("Error rendering image:", error);
-        }
+        root.ctx.drawImage(img, ...__classPrivateFieldGet(this, _Image_renderParams, "f"));
     }
 }
 _Image_root = new WeakMap(), _Image_src = new WeakMap(), _Image_image = new WeakMap(), _Image_sx = new WeakMap(), _Image_sy = new WeakMap(), _Image_sw = new WeakMap(), _Image_sh = new WeakMap(), _Image_renderParams = new WeakMap();
