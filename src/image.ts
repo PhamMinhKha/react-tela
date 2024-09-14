@@ -48,20 +48,17 @@ export class Image extends Entity {
 	}
 
 	async loadImage() {
-		try {
-			const img = await this.#root.loadImage(this.#src);
-			this.#image = img;
-			if (this.width === 0) {
-				this.width = img.naturalWidth;
-			}
-			if (this.height === 0) {
-				this.height = img.naturalHeight;
-			}
-			this.updateRenderParams();
-			this.root?.queueRender();
-		} catch (error) {
-			// console.warn("Error loading image:", error);
+		const img = await this.#root.loadImage(this.#src);
+		this.#image = img;
+		if (this.width === 0) {
+			this.width = img.naturalWidth;
 		}
+		if (this.height === 0) {
+			this.height = img.naturalHeight;
+		}
+		this.updateRenderParams();
+		this.root?.queueRender();
+
 	}
 
 	private updateRenderParams() {

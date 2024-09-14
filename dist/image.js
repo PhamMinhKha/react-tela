@@ -45,21 +45,16 @@ export class Image extends Entity {
         }
     }
     async loadImage() {
-        try {
-            const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
-            __classPrivateFieldSet(this, _Image_image, img, "f");
-            if (this.width === 0) {
-                this.width = img.naturalWidth;
-            }
-            if (this.height === 0) {
-                this.height = img.naturalHeight;
-            }
-            this.updateRenderParams();
-            this.root?.queueRender();
+        const img = await __classPrivateFieldGet(this, _Image_root, "f").loadImage(__classPrivateFieldGet(this, _Image_src, "f"));
+        __classPrivateFieldSet(this, _Image_image, img, "f");
+        if (this.width === 0) {
+            this.width = img.naturalWidth;
         }
-        catch (error) {
-            // console.warn("Error loading image:", error);
+        if (this.height === 0) {
+            this.height = img.naturalHeight;
         }
+        this.updateRenderParams();
+        this.root?.queueRender();
     }
     updateRenderParams() {
         const img = __classPrivateFieldGet(this, _Image_image, "f");
