@@ -60,7 +60,7 @@ export class Image extends Entity {
 			this.updateRenderParams();
 			this.root?.queueRender();
 		} catch (error) {
-			console.warn("Error loading image:", error);
+			// console.warn("Error loading image:", error);
 		}
 	}
 
@@ -87,7 +87,7 @@ export class Image extends Entity {
 		try {
 			root.ctx.drawImage(img, ...this.#renderParams);
 		} catch (error) {
-			console.warn("Error rendering image:", error);
+			// console.warn("Error rendering image:", error);
 		}
 	}
 }
