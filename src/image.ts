@@ -14,10 +14,11 @@ export class Image extends Entity {
 	#root: Root;
 	#src: string;
 	#image?: IImage;
-	sx?: number;
-	sy?: number;
-	sw?: number;
-	sh?: number;
+	#sx: number;
+	#sy: number;
+	#sw?: number;
+	#sh?: number;
+	#renderParams: [number, number, number, number, number, number, number, number];
 
 	constructor(opts: ImageProps, root: Root) {
 		super({
@@ -25,12 +26,13 @@ export class Image extends Entity {
 			height: 0,
 			...opts,
 		});
-		this.sx = opts.sx;
-		this.sy = opts.sy;
-		this.sw = opts.sw;
-		this.sh = opts.sh;
+		this.#sx = opts.sx ?? 0;
+		this.#sy = opts.sy ?? 0;
+		this.#sw = opts.sw;
+		this.#sh = opts.sh;
 		this.#root = root;
 		this.#src = opts.src;
+		this.#renderParams = [0, 0, 0, 0, 0, 0, this.width, this.height];
 		this.loadImage();
 	}
 
@@ -55,11 +57,25 @@ export class Image extends Entity {
 			if (this.height === 0) {
 				this.height = img.naturalHeight;
 			}
+			this.updateRenderParams();
 			this.root?.queueRender();
 		} catch (error) {
 			console.warn("Error loading image:", error);
-			// Có thể thêm xử lý lỗi tùy chỉnh ở đây nếu cần
 		}
+	}
+
+	private updateRenderParams() {
+		const img = this.#image;
+		if (!img) return;
+
+		this.#renderParams[0] = this.#sx;
+		this.#renderParams[1] = this.#sy;
+		this.#renderParams[2] = this.#sw ?? img.naturalWidth;
+		this.#renderParams[3] = this.#sh ?? img.naturalHeight;
+		this.#renderParams[4] = 0;
+		this.#renderParams[5] = 0;
+		this.#renderParams[6] = this.width;
+		this.#renderParams[7] = this.height;
 	}
 
 	render(): void {
@@ -68,13 +84,8 @@ export class Image extends Entity {
 		const img = this.#image;
 		if (!img || !root.ctx) return;
 
-		const sx = this.sx ?? 0;
-		const sy = this.sy ?? 0;
-		const sw = this.sw ?? img.naturalWidth;
-		const sh = this.sh ?? img.naturalHeight;
-
 		try {
-			root.ctx.drawImage(img, sx, sy, sw, sh, 0, 0, this.width, this.height);
+			root.ctx.drawImage(img, ...this.#renderParams);
 		} catch (error) {
 			console.warn("Error rendering image:", error);
 		}
