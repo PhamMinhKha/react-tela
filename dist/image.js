@@ -51,8 +51,8 @@ export class Image extends Entity {
             this.root?.queueRender();
         }
         catch (error) {
-            // console.error("Error loading image:", error);
-            // Thực hiện xử lý lỗi tùy chỉnh ở đây nếu cần
+            console.warn("Error loading image:", error);
+            // Có thể thêm xử lý lỗi tùy chỉnh ở đây nếu cần
         }
     }
     render() {
@@ -69,7 +69,7 @@ export class Image extends Entity {
             root.ctx.drawImage(img, sx, sy, sw, sh, 0, 0, this.width, this.height);
         }
         catch (error) {
-            // console.error("Error rendering image:", error);
+            console.warn("Error rendering image:", error);
         }
     }
 }
